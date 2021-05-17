@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: echoserver
+  namespace: default
+  labels:
+    app: echoserver
+spec:
+  serviceName: echoserver
+  replicas: 1
+  selector:
+    matchLabels:
+      app: echoserver
+  template:
+    metadata:
+      labels:
+        app: echoserver
+    spec:
+      containers:
+      - args:
+        - /app/echoserver
+        image: docker.io/mwennrich/echoserver:latest
+        name: echoserver
+        ports:
+        - containerPort: 8090
+          name: echo
+        env:
+        - name: KUBE_NODE_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: spec.nodeName
+
