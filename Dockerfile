@@ -1,4 +1,4 @@
-FROM golang:1.16-alpine AS build
+FROM golang:1.17 AS build
 ENV GO111MODULE=on
 ENV CGO_ENABLED=0
 
@@ -7,6 +7,7 @@ COPY . /app
 WORKDIR /app
 
 RUN go build echoserver.go
+RUN strip echoserver
 
 FROM alpine:latest
 
