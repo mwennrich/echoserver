@@ -8,8 +8,8 @@ echoserver:
 	go build -tags netgo -o bin/echoserver *.go
 	strip bin/echoserver
 
-.PHONY: dockerbuild
-dockerbuild:
+.PHONY: dockerimages
+dockerimages:
 	docker build -t mwennrich/echoserver:${DOCKER_TAG} .
 
 .PHONY: dockerpush
