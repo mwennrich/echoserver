@@ -3,8 +3,8 @@
 ## Install
 
 ```bash
-> kubectl apply -f https://raw.githubusercontent.com/mwennrich/echoserver/master/samples/echoserverStatefulSet.yaml
-> kubectl apply -f https://raw.githubusercontent.com/mwennrich/echoserver/master/samples/echoserverService.yaml
+> kubectl apply -f https://raw.githubusercontent.com/mwennrich/echoserver/main/samples/echoserverStatefulSet.yaml
+> kubectl apply -f https://raw.githubusercontent.com/mwennrich/echoserver/main/samples/echoserverService.yaml
 ```
 
 ## Use/Test
