@@ -13,7 +13,7 @@ import (
 func main() {
 
 	e := echo.New()
-	e.GET("/echo", func(c echo.Context) error {
+	e.GET("/stream", func(c echo.Context) error {
 		c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextPlain)
 		c.Response().WriteHeader(http.StatusOK)
 
@@ -46,6 +46,21 @@ func main() {
 		c.Response().Flush()
 		return nil
 	})
+
+	e.POST("/echo", func(c echo.Context) error {
+		c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextPlain)
+		c.Response().WriteHeader(http.StatusOK)
+
+		data := c.FormValue("data")
+
+		enc := json.NewEncoder(c.Response())
+		if err := enc.Encode(fmt.Sprintf("%s / %s / %v", time.Now(), os.Getenv("KUBE_NODE_NAME"), data)); err != nil {
+			return err
+		}
+		c.Response().Flush()
+		return nil
+	})
+
 	e.GET("/headers", func(c echo.Context) error {
 		c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextPlain)
 		c.Response().WriteHeader(http.StatusOK)

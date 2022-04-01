@@ -12,6 +12,7 @@
 ```bash
 > curl http://example.com/headers
 > curl http://example.com/hello
-> curl http://example.com/echo
-> curl http://example.com/echo?interval=0.5s
+> curl http://example.com/stream
+> curl http://example.com/stream?interval=0.5s
+> echo -n "blafasel"| curl  --data-urlencode data@- http://example.com/echo
 ```
