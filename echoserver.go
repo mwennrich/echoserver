@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -17,13 +18,21 @@ func main() {
 		c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextPlain)
 		c.Response().WriteHeader(http.StatusOK)
 
+		delayS := c.QueryParam("delay")
+		if delayS == "" {
+			delayS = "1"
+		}
+		delay, err := strconv.ParseFloat(delayS, 32)
+		if err != nil {
+			delay = 1
+		}
 		enc := json.NewEncoder(c.Response())
 		for {
 			if err := enc.Encode(fmt.Sprintf("%s / %s", time.Now(), os.Getenv("KUBE_NODE_NAME"))); err != nil {
 				return err
 			}
 			c.Response().Flush()
-			time.Sleep(1 * time.Second)
+			time.Sleep(time.Duration(delay) * time.Second)
 		}
 	})
 
