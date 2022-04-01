@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"strconv"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -20,11 +19,11 @@ func main() {
 
 		intervalS := c.QueryParam("interval")
 		if intervalS == "" {
-			intervalS = "1"
+			intervalS = "1s"
 		}
-		interval, err := strconv.ParseFloat(intervalS, 32)
+		interval, err := time.ParseDuration(intervalS)
 		if err != nil {
-			interval = 1
+			interval = time.Second
 		}
 		enc := json.NewEncoder(c.Response())
 		for {
@@ -32,7 +31,7 @@ func main() {
 				return err
 			}
 			c.Response().Flush()
-			time.Sleep(time.Duration(interval) * time.Second)
+			time.Sleep(interval)
 		}
 	})
 
