@@ -13,4 +13,5 @@
 > curl http://example.com/headers
 > curl http://example.com/hello
 > curl http://example.com/echo
+> curl http://example.com/hello?interval=0.5
 ```

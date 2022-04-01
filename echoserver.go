@@ -18,13 +18,13 @@ func main() {
 		c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextPlain)
 		c.Response().WriteHeader(http.StatusOK)
 
-		delayS := c.QueryParam("delay")
-		if delayS == "" {
-			delayS = "1"
+		intervalS := c.QueryParam("interval")
+		if intervalS == "" {
+			intervalS = "1"
 		}
-		delay, err := strconv.ParseFloat(delayS, 32)
+		interval, err := strconv.ParseFloat(intervalS, 32)
 		if err != nil {
-			delay = 1
+			interval = 1
 		}
 		enc := json.NewEncoder(c.Response())
 		for {
@@ -32,7 +32,7 @@ func main() {
 				return err
 			}
 			c.Response().Flush()
-			time.Sleep(time.Duration(delay) * time.Second)
+			time.Sleep(time.Duration(interval) * time.Second)
 		}
 	})
 
