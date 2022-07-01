@@ -16,18 +16,19 @@ spec:
       labels:
         app: echoserver
     spec:
+      automountServiceAccountToken: false
       containers:
-      - args:
-        - /app/echoserver
+      - name: echoserver
         image: docker.io/mwennrich/echoserver:latest
-        name: echoserver
         ports:
         - containerPort: 8090
           name: echo
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
         env:
         - name: KUBE_NODE_NAME
           valueFrom:
             fieldRef:
               apiVersion: v1
               fieldPath: spec.nodeName
-
