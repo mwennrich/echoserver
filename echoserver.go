@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
+	"k8s.io/apimachinery/pkg/api/resource"
 )
 
 func main() {
@@ -73,6 +74,30 @@ func main() {
 				}
 			}
 		}
+		c.Response().Flush()
+		return nil
+	})
+
+	e.GET("/speed", func(c echo.Context) error {
+		c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextPlain)
+		c.Response().WriteHeader(http.StatusOK)
+
+		sizeS := c.QueryParam("size")
+		if sizeS == "" {
+			sizeS = "10Mi"
+		}
+		quantity, err := resource.ParseQuantity(sizeS)
+		if err != nil {
+			// return fmt.Errorf("failed to parse quantity: %v", err)
+			c.Response().WriteHeader(http.StatusInternalServerError)
+			c.Response().Write([]byte(fmt.Sprintf("failed to parse quantity: %v\n", err)))
+			c.Response().Flush()
+			return nil
+		}
+
+		data := make([]byte, quantity.Value())
+
+		c.Response().Write(data)
 		c.Response().Flush()
 		return nil
 	})

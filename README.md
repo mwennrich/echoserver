@@ -14,5 +14,6 @@
 > curl http://example.com/hello
 > curl http://example.com/stream
 > curl http://example.com/stream?interval=0.5s
+> curl http://example.com/speed?size=10Gi -o /dev/null
 > echo -n "blafasel"| curl  --data-urlencode data@- http://example.com/echo
 ```
