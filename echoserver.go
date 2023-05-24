@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"k8s.io/apimachinery/pkg/api/resource"
 )
 
@@ -129,5 +130,7 @@ func main() {
 		return nil
 
 	})
+
+	e.Use(middleware.Logger())
 	e.Logger.Fatal(e.Start(":8090"))
 }
