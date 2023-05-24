@@ -19,7 +19,7 @@ spec:
       automountServiceAccountToken: false
       containers:
       - name: echoserver
-        image: docker.io/mwennrich/echoserver:latest
+        image: ghcr.io/mwennrich/echoserver:latest
         ports:
         - containerPort: 8090
           name: echo
