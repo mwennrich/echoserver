@@ -90,14 +90,20 @@ func main() {
 		if err != nil {
 			// return fmt.Errorf("failed to parse quantity: %v", err)
 			c.Response().WriteHeader(http.StatusInternalServerError)
-			c.Response().Write([]byte(fmt.Sprintf("failed to parse quantity: %v\n", err)))
+			_, err = c.Response().Write([]byte(fmt.Sprintf("failed to parse quantity: %v\n", err)))
+			if err != nil {
+				return err
+			}
 			c.Response().Flush()
 			return nil
 		}
 
 		data := make([]byte, quantity.Value())
 
-		c.Response().Write(data)
+		_, err = c.Response().Write(data)
+		if err != nil {
+			return err
+		}
 		c.Response().Flush()
 		return nil
 	})
@@ -115,7 +121,10 @@ func main() {
 > echo -n "blafasel"| curl  --data-urlencode data@- http://example.com/echo
 `
 
-		c.Response().Write([]byte(help))
+		_, err := c.Response().Write([]byte(help))
+		if err != nil {
+			return err
+		}
 		c.Response().Flush()
 		return nil
 
