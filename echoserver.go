@@ -102,5 +102,23 @@ func main() {
 		return nil
 	})
 
+	e.GET("/", func(c echo.Context) error {
+		c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextPlain)
+		c.Response().WriteHeader(http.StatusOK)
+
+		help := `Usage:
+> curl http://example.com/headers
+> curl http://example.com/hello
+> curl http://example.com/stream
+> curl http://example.com/stream?interval=0.5s
+> curl http://example.com/speed?size=10Gi -o /dev/null
+> echo -n "blafasel"| curl  --data-urlencode data@- http://example.com/echo
+`
+
+		c.Response().Write([]byte(help))
+		c.Response().Flush()
+		return nil
+
+	})
 	e.Logger.Fatal(e.Start(":8090"))
 }
