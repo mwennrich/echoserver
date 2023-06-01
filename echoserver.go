@@ -8,6 +8,8 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
+	"k8s.io/apimachinery/pkg/api/resource"
 )
 
 func main() {
@@ -77,5 +79,58 @@ func main() {
 		return nil
 	})
 
+	e.GET("/speed", func(c echo.Context) error {
+		c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextPlain)
+		c.Response().WriteHeader(http.StatusOK)
+
+		sizeS := c.QueryParam("size")
+		if sizeS == "" {
+			sizeS = "10Mi"
+		}
+		quantity, err := resource.ParseQuantity(sizeS)
+		if err != nil {
+			// return fmt.Errorf("failed to parse quantity: %v", err)
+			c.Response().WriteHeader(http.StatusInternalServerError)
+			_, err = c.Response().Write([]byte(fmt.Sprintf("failed to parse quantity: %v\n", err)))
+			if err != nil {
+				return err
+			}
+			c.Response().Flush()
+			return nil
+		}
+
+		data := make([]byte, quantity.Value())
+
+		_, err = c.Response().Write(data)
+		if err != nil {
+			return err
+		}
+		c.Response().Flush()
+		return nil
+	})
+
+	e.GET("/", func(c echo.Context) error {
+		c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextPlain)
+		c.Response().WriteHeader(http.StatusOK)
+
+		help := `Usage:
+> curl http://example.com/headers
+> curl http://example.com/hello
+> curl http://example.com/stream
+> curl http://example.com/stream?interval=0.5s
+> curl http://example.com/speed?size=10Gi -o /dev/null
+> echo -n "blafasel"| curl  --data-urlencode data@- http://example.com/echo
+`
+
+		_, err := c.Response().Write([]byte(help))
+		if err != nil {
+			return err
+		}
+		c.Response().Flush()
+		return nil
+
+	})
+
+	e.Use(middleware.Logger())
 	e.Logger.Fatal(e.Start(":8090"))
 }
