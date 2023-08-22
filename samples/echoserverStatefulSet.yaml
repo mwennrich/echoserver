@@ -17,6 +17,10 @@ spec:
         app: echoserver
     spec:
       automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
       containers:
       - name: echoserver
         image: ghcr.io/mwennrich/echoserver:latest
@@ -25,7 +29,9 @@ spec:
           name: echo
         securityContext:
           allowPrivilegeEscalation: false
-          runAsNonRoot: true
+          capabilities:
+            drop:
+            - ALL
         env:
         - name: KUBE_NODE_NAME
           valueFrom:
