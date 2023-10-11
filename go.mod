@@ -3,8 +3,8 @@ module github.com/mwennrich/echoserver
 go 1.21
 
 require (
-	github.com/labstack/echo/v4 v4.11.1
-	k8s.io/apimachinery v0.27.4
+	github.com/labstack/echo/v4 v4.11.2
+	k8s.io/apimachinery v0.28.2
 )
 
 require (
@@ -15,10 +15,10 @@ require (
 	github.com/mattn/go-isatty v0.0.19 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
-	golang.org/x/crypto v0.12.0 // indirect
-	golang.org/x/net v0.14.0 // indirect
-	golang.org/x/sys v0.11.0 // indirect
-	golang.org/x/text v0.12.0 // indirect
+	golang.org/x/crypto v0.14.0 // indirect
+	golang.org/x/net v0.17.0 // indirect
+	golang.org/x/sys v0.13.0 // indirect
+	golang.org/x/text v0.13.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 )
