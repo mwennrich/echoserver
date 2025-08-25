@@ -89,14 +89,7 @@ func main() {
 		}
 		quantity, err := resource.ParseQuantity(sizeS)
 		if err != nil {
-			// return fmt.Errorf("failed to parse quantity: %v", err)
-			c.Response().WriteHeader(http.StatusInternalServerError)
-			_, err =  fmt.Fprintf(c.Response(), "failed to parse quantity: %v\n", err)
-			if err != nil {
-				return err
-			}
-			c.Response().Flush()
-			return nil
+			return c.String(http.StatusInternalServerError, fmt.Sprintf("failed to parse quantity: %v\n", err))
 		}
 
 		data := make([]byte, quantity.Value())
