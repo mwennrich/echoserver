@@ -124,6 +124,6 @@ func main() {
 
 	})
 
-	e.Use(middleware.Logger())
+	e.Use(middleware.RequestLogger())
 	e.Logger.Fatal(e.Start(":8090"))
 }
