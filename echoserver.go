@@ -7,15 +7,15 @@ import (
 	"os"
 	"time"
 
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
+	"github.com/labstack/echo/v5"
+	"github.com/labstack/echo/v5/middleware"
 	"k8s.io/apimachinery/pkg/api/resource"
 )
 
 func main() {
 
 	e := echo.New()
-	e.GET("/stream", func(c echo.Context) error {
+	e.GET("/stream", func(c *echo.Context) error {
 		c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextPlain)
 		c.Response().WriteHeader(http.StatusOK)
 
@@ -32,12 +32,14 @@ func main() {
 			if err := enc.Encode(fmt.Sprintf("%s / %s", time.Now(), os.Getenv("KUBE_NODE_NAME"))); err != nil {
 				return err
 			}
-			c.Response().Flush()
+			if err := http.NewResponseController(c.Response()).Flush(); err != nil {
+				return err
+			}
 			time.Sleep(interval)
 		}
 	})
 
-	e.GET("/hello", func(c echo.Context) error {
+	e.GET("/hello", func(c *echo.Context) error {
 		c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextPlain)
 		c.Response().WriteHeader(http.StatusOK)
 
@@ -45,11 +47,13 @@ func main() {
 		if err := enc.Encode(fmt.Sprintf("%s / %s", time.Now(), os.Getenv("KUBE_NODE_NAME"))); err != nil {
 			return err
 		}
-		c.Response().Flush()
+		if err := http.NewResponseController(c.Response()).Flush(); err != nil {
+			return err
+		}
 		return nil
 	})
 
-	e.POST("/echo", func(c echo.Context) error {
+	e.POST("/echo", func(c *echo.Context) error {
 		c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextPlain)
 		c.Response().WriteHeader(http.StatusOK)
 
@@ -59,11 +63,13 @@ func main() {
 		if err := enc.Encode(fmt.Sprintf("%s / %s / %v", time.Now(), os.Getenv("KUBE_NODE_NAME"), data)); err != nil {
 			return err
 		}
-		c.Response().Flush()
+		if err := http.NewResponseController(c.Response()).Flush(); err != nil {
+			return err
+		}
 		return nil
 	})
 
-	e.GET("/headers", func(c echo.Context) error {
+	e.GET("/headers", func(c *echo.Context) error {
 		c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextPlain)
 		c.Response().WriteHeader(http.StatusOK)
 
@@ -75,11 +81,13 @@ func main() {
 				}
 			}
 		}
-		c.Response().Flush()
+		if err := http.NewResponseController(c.Response()).Flush(); err != nil {
+			return err
+		}
 		return nil
 	})
 
-	e.GET("/speed", func(c echo.Context) error {
+	e.GET("/speed", func(c *echo.Context) error {
 		c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextPlain)
 		c.Response().WriteHeader(http.StatusOK)
 
@@ -98,11 +106,13 @@ func main() {
 		if err != nil {
 			return err
 		}
-		c.Response().Flush()
+		if err := http.NewResponseController(c.Response()).Flush(); err != nil {
+			return err
+		}
 		return nil
 	})
 
-	e.GET("/", func(c echo.Context) error {
+	e.GET("/", func(c *echo.Context) error {
 		c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextPlain)
 		c.Response().WriteHeader(http.StatusOK)
 
@@ -119,11 +129,16 @@ func main() {
 		if err != nil {
 			return err
 		}
-		c.Response().Flush()
+		if err := http.NewResponseController(c.Response()).Flush(); err != nil {
+			return err
+		}
 		return nil
 
 	})
 
 	e.Use(middleware.RequestLogger())
-	e.Logger.Fatal(e.Start(":8090"))
+
+	if err := e.Start(":8090"); err != nil {
+		e.Logger.Error("failed to start echo server", "error", err)
+	}
 }
