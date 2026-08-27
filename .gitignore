@@ -1,2 +1,9 @@
 /bin
 .vscode
+.agents
+workspace
+.devcontainer/
+skills-lock.json
+echoserver
+mantis-summary.md
+.gitignore
