@@ -3,7 +3,7 @@ module github.com/mwennrich/echoserver
 go 1.26.0
 
 require (
-	github.com/labstack/echo/v5 v5.3.1
+	github.com/labstack/echo/v5 v5.4.0
 	k8s.io/apimachinery v0.37.1
 )
 
