@@ -4,7 +4,7 @@ go 1.26.0
 
 require (
 	github.com/labstack/echo/v5 v5.4.2
-	k8s.io/apimachinery v0.37.1
+	k8s.io/apimachinery v0.37.2
 )
 
 require (
